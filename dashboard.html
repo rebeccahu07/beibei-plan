@@ -886,9 +886,31 @@
   <div class="weight-section">
     <div class="section-title">⚖️ 减重进度</div>
     <div class="weight-display">
-      <div class="weight-current">
-        <div class="weight-number" id="current-weight">90.0</div>
+      <div class="weight-current" style="position:relative;">
+        <!-- 体重数字（默认隐藏） -->
+        <div class="weight-number" id="current-weight" style="filter:blur(8px);user-select:none;transition:filter 0.4s;">90.0</div>
         <div class="weight-unit">kg · 当前体重</div>
+        <!-- 解锁遮罩 -->
+        <div id="weight-lock-mask" onclick="showWeightUnlockBox()" title="点击查看体重"
+          style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10;">
+          <span style="font-size:28px;opacity:0.7;">🔒</span>
+        </div>
+        <!-- 解锁输入框（默认隐藏） -->
+        <div id="weight-unlock-box"
+          style="display:none;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:20;
+                 background:rgba(15,15,26,0.95);border:1px solid rgba(167,139,250,0.4);border-radius:14px;
+                 padding:12px 14px;text-align:center;min-width:130px;backdrop-filter:blur(16px);
+                 box-shadow:0 8px 32px rgba(120,60,180,0.4);">
+          <div style="font-size:11px;color:#a78bfa;margin-bottom:8px;font-weight:600;letter-spacing:0.5px;">输入数字解锁</div>
+          <input id="weight-pin-input" type="number" inputmode="numeric" pattern="[0-9]*"
+            placeholder="●"
+            style="width:80px;padding:8px 10px;border-radius:8px;border:1px solid rgba(167,139,250,0.3);
+                   background:rgba(255,255,255,0.06);color:#e8e8f0;font-size:18px;text-align:center;
+                   outline:none;box-sizing:border-box;letter-spacing:2px;"
+            onkeydown="if(event.key==='Enter')checkWeightPin()"
+            oninput="if(this.value.length>=1)checkWeightPin()">
+          <div id="weight-pin-err" style="font-size:10px;color:#f87171;margin-top:5px;display:none;">密码错误</div>
+        </div>
       </div>
       <div class="weight-stats">
         <div class="weight-stat">
@@ -1419,6 +1441,68 @@ function cycleMood() {
   updateUI();
   showRipple(event);
 }
+
+// ====== 体重隐藏/解锁逻辑 ======
+const WEIGHT_PIN = '9';  // 解锁密码：数字 9
+
+function showWeightUnlockBox() {
+  const box = document.getElementById('weight-unlock-box');
+  const mask = document.getElementById('weight-lock-mask');
+  if (box.style.display === 'none') {
+    box.style.display = 'block';
+    mask.style.display = 'none';
+    setTimeout(() => {
+      const inp = document.getElementById('weight-pin-input');
+      if (inp) inp.focus();
+    }, 50);
+  }
+}
+
+function checkWeightPin() {
+  const inp = document.getElementById('weight-pin-input');
+  const err = document.getElementById('weight-pin-err');
+  const val = inp.value.trim();
+  if (val.length < 1) return;
+  if (val === WEIGHT_PIN) {
+    // 正确：显示体重，隐藏遮罩
+    document.getElementById('current-weight').style.filter = 'none';
+    document.getElementById('weight-unlock-box').style.display = 'none';
+    document.getElementById('weight-lock-mask').style.display = 'none';
+    err.style.display = 'none';
+    // 5秒后自动重新上锁
+    setTimeout(lockWeight, 5000);
+  } else {
+    // 错误：抖动提示
+    err.style.display = 'block';
+    inp.value = '';
+    inp.style.borderColor = 'rgba(248,113,113,0.6)';
+    setTimeout(() => {
+      inp.style.borderColor = 'rgba(167,139,250,0.3)';
+      document.getElementById('weight-unlock-box').style.display = 'none';
+      document.getElementById('weight-lock-mask').style.display = 'flex';
+    }, 1200);
+  }
+}
+
+function lockWeight() {
+  document.getElementById('current-weight').style.filter = 'blur(8px)';
+  document.getElementById('weight-lock-mask').style.display = 'flex';
+  document.getElementById('weight-unlock-box').style.display = 'none';
+  const inp = document.getElementById('weight-pin-input');
+  if (inp) { inp.value = ''; }
+}
+
+// 点击遮罩外部时关闭输入框
+document.addEventListener('click', function(e) {
+  const box = document.getElementById('weight-unlock-box');
+  const mask = document.getElementById('weight-lock-mask');
+  if (box && box.style.display !== 'none') {
+    if (!box.contains(e.target) && e.target !== mask && !mask.contains(e.target)) {
+      box.style.display = 'none';
+      mask.style.display = 'flex';
+    }
+  }
+});
 
 function openWeightModal() {
   document.getElementById('weight-modal').classList.add('show');
