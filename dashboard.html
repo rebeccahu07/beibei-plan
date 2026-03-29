@@ -1,0 +1,1481 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>蓓蓓的蜕变计划 ✨</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  body {
+    font-family: -apple-system, 'PingFang SC', 'Helvetica Neue', sans-serif;
+    background: #0f0f1a;
+    color: #e8e8f0;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* 星空背景 */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: 
+      radial-gradient(ellipse at 20% 50%, rgba(120,60,180,0.15) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 20%, rgba(60,120,220,0.12) 0%, transparent 50%),
+      radial-gradient(ellipse at 60% 80%, rgba(180,80,120,0.1) 0%, transparent 40%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 24px 20px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* 顶部标题栏 */
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+    padding: 20px 28px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 20px;
+    backdrop-filter: blur(20px);
+  }
+
+  .header-left h1 {
+    font-size: 26px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #f8b4d9, #a78bfa, #60a5fa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 4px;
+  }
+
+  .header-left p {
+    font-size: 13px;
+    color: #8888aa;
+  }
+
+  .header-right {
+    text-align: right;
+  }
+
+  .day-badge {
+    background: linear-gradient(135deg, #7c3aed, #4f46e5);
+    border-radius: 12px;
+    padding: 8px 18px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 4px;
+    display: inline-block;
+  }
+
+  .date-text {
+    font-size: 12px;
+    color: #8888aa;
+  }
+
+  /* 体重进度区 */
+  .weight-section {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 20px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+    backdrop-filter: blur(20px);
+  }
+
+  .section-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #8888aa;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+  }
+
+  .weight-display {
+    display: flex;
+    align-items: flex-end;
+    gap: 32px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+
+  .weight-current {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .weight-number {
+    font-size: 56px;
+    font-weight: 800;
+    line-height: 1;
+    background: linear-gradient(135deg, #f8b4d9, #a78bfa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .weight-unit {
+    font-size: 16px;
+    color: #8888aa;
+    margin-top: 4px;
+  }
+
+  .weight-stats {
+    display: flex;
+    gap: 24px;
+    align-items: flex-end;
+  }
+
+  .weight-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .weight-stat-label {
+    font-size: 11px;
+    color: #666688;
+  }
+
+  .weight-stat-value {
+    font-size: 20px;
+    font-weight: 700;
+    color: #60a5fa;
+  }
+
+  .weight-stat-value.green { color: #34d399; }
+  .weight-stat-value.orange { color: #fb923c; }
+
+  /* 进度条区域 */
+  .progress-area { margin-bottom: 8px; }
+
+  .progress-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #8888aa;
+    margin-bottom: 8px;
+  }
+
+  .progress-bar-wrap {
+    background: rgba(255,255,255,0.06);
+    border-radius: 100px;
+    height: 14px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    border-radius: 100px;
+    background: linear-gradient(90deg, #7c3aed, #ec4899, #f97316);
+    transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+  }
+
+  .progress-bar-fill::after {
+    content: '';
+    position: absolute;
+    right: 0; top: 0;
+    width: 8px; height: 100%;
+    background: rgba(255,255,255,0.6);
+    border-radius: 100px;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+  }
+
+  /* 月度目标里程碑 */
+  .milestones {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+
+  .milestone {
+    flex: none;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 10px 14px;
+    text-align: center;
+    min-width: 90px;
+    transition: all 0.2s;
+  }
+
+  .milestone.achieved {
+    background: rgba(52,211,153,0.1);
+    border-color: rgba(52,211,153,0.3);
+  }
+
+  .milestone.current {
+    background: rgba(167,139,250,0.15);
+    border-color: rgba(167,139,250,0.4);
+    box-shadow: 0 0 12px rgba(167,139,250,0.2);
+  }
+
+  .milestone-month {
+    font-size: 11px;
+    color: #8888aa;
+    margin-bottom: 4px;
+  }
+
+  .milestone-weight {
+    font-size: 16px;
+    font-weight: 700;
+    color: #e8e8f0;
+  }
+
+  .milestone-loss {
+    font-size: 11px;
+    margin-top: 2px;
+  }
+
+  .milestone.achieved .milestone-loss { color: #34d399; }
+  .milestone.current .milestone-loss { color: #a78bfa; }
+  .milestone .milestone-loss { color: #666688; }
+
+  /* 三列状态卡 */
+  .cards-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  .status-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 18px;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+    user-select: none;
+  }
+
+  .status-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    border-radius: 18px 18px 0 0;
+    transition: opacity 0.3s;
+  }
+
+  .status-card.exercise::before { background: linear-gradient(90deg, #60a5fa, #34d399); }
+  .status-card.style::before { background: linear-gradient(90deg, #f8b4d9, #ec4899); }
+  .status-card.mood::before { background: linear-gradient(90deg, #fbbf24, #a78bfa); }
+
+  .status-card:hover {
+    transform: translateY(-2px);
+    background: rgba(255,255,255,0.07);
+    border-color: rgba(255,255,255,0.15);
+  }
+
+  .status-card:active { transform: scale(0.98); }
+
+  .card-icon { font-size: 28px; margin-bottom: 10px; }
+
+  .card-title {
+    font-size: 12px;
+    color: #8888aa;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+  }
+
+  .card-value {
+    font-size: 28px;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .exercise .card-value { color: #60a5fa; }
+  .style .card-value { color: #f8b4d9; }
+  .mood .card-value { font-size: 36px; }
+
+  .card-hint {
+    font-size: 11px;
+    color: #555577;
+  }
+
+  /* Coach团队区 */
+  .coaches-section {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 20px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+
+  .coaches-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #8888aa;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+  }
+
+  .coaches-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  .coach-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 20px;
+    text-align: center;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .coach-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.3);
+  }
+
+  .coach-card.max { border-color: rgba(96,165,250,0.25); }
+  .coach-card.lily { border-color: rgba(248,180,217,0.25); }
+  .coach-card.luna { border-color: rgba(167,139,250,0.25); }
+
+  .coach-card.max:hover { box-shadow: 0 12px 32px rgba(96,165,250,0.15); }
+  .coach-card.lily:hover { box-shadow: 0 12px 32px rgba(248,180,217,0.15); }
+  .coach-card.luna:hover { box-shadow: 0 12px 32px rgba(167,139,250,0.15); }
+
+  /* Coach SVG头像 */
+  .coach-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin: 0 auto 12px;
+    position: relative;
+    overflow: hidden;
+    border: 3px solid transparent;
+    background-clip: padding-box;
+  }
+
+  .coach-card.max .coach-avatar { box-shadow: 0 0 0 2px rgba(96,165,250,0.5), 0 4px 16px rgba(96,165,250,0.2); }
+  .coach-card.lily .coach-avatar { box-shadow: 0 0 0 2px rgba(248,180,217,0.5), 0 4px 16px rgba(248,180,217,0.2); }
+  .coach-card.luna .coach-avatar { box-shadow: 0 0 0 2px rgba(167,139,250,0.5), 0 4px 16px rgba(167,139,250,0.2); }
+
+  .coach-avatar svg { width: 100%; height: 100%; }
+
+  .coach-name {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .coach-card.max .coach-name { color: #60a5fa; }
+  .coach-card.lily .coach-name { color: #f8b4d9; }
+  .coach-card.luna .coach-name { color: #a78bfa; }
+
+  .coach-role {
+    font-size: 12px;
+    color: #8888aa;
+    margin-bottom: 12px;
+  }
+
+  .coach-personality {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    justify-content: center;
+    margin-bottom: 12px;
+  }
+
+  .tag {
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 20px;
+    font-weight: 600;
+  }
+
+  .coach-card.max .tag { background: rgba(96,165,250,0.15); color: #60a5fa; border: 1px solid rgba(96,165,250,0.25); }
+  .coach-card.lily .tag { background: rgba(248,180,217,0.15); color: #f8b4d9; border: 1px solid rgba(248,180,217,0.25); }
+  .coach-card.luna .tag { background: rgba(167,139,250,0.15); color: #a78bfa; border: 1px solid rgba(167,139,250,0.25); }
+
+  .coach-quote {
+    font-size: 12px;
+    color: #666688;
+    line-height: 1.6;
+    font-style: italic;
+    padding: 10px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 8px;
+    border-left: 2px solid rgba(255,255,255,0.1);
+    text-align: left;
+  }
+
+  .coach-card.max .coach-quote { border-left-color: rgba(96,165,250,0.3); }
+  .coach-card.lily .coach-quote { border-left-color: rgba(248,180,217,0.3); }
+  .coach-card.luna .coach-quote { border-left-color: rgba(167,139,250,0.3); }
+
+  /* 今日任务 */
+  .tasks-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  .tasks-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 18px;
+    padding: 22px;
+  }
+
+  .tasks-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+
+  .tasks-header-left {
+    font-size: 15px;
+    font-weight: 600;
+    color: #e8e8f0;
+  }
+
+  .tasks-count {
+    font-size: 12px;
+    color: #8888aa;
+    background: rgba(255,255,255,0.06);
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+
+  .task-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    cursor: pointer;
+    transition: all 0.2s;
+    border-radius: 8px;
+    padding-left: 4px;
+  }
+
+  .task-item:last-child { border-bottom: none; }
+  .task-item:hover { background: rgba(255,255,255,0.03); }
+
+  .task-checkbox {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.2);
+    flex-shrink: 0;
+    margin-top: 1px;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+  }
+
+  .task-item.done .task-checkbox {
+    background: #34d399;
+    border-color: #34d399;
+    color: #fff;
+  }
+
+  .task-text {
+    font-size: 14px;
+    line-height: 1.5;
+    color: #ccccdd;
+    transition: all 0.2s;
+  }
+
+  .task-item.done .task-text {
+    text-decoration: line-through;
+    color: #555577;
+  }
+
+  .task-priority {
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 6px;
+    flex-shrink: 0;
+    margin-top: 3px;
+  }
+
+  .priority-high { background: rgba(248,113,113,0.2); color: #f87171; }
+  .priority-mid { background: rgba(251,191,36,0.2); color: #fbbf24; }
+  .priority-low { background: rgba(96,165,250,0.2); color: #60a5fa; }
+
+  /* 四阶段路线图 */
+  .journey-section {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 20px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+  }
+
+  .journey-track {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-top: 16px;
+    position: relative;
+  }
+
+  .journey-phase {
+    flex: 1;
+    position: relative;
+    text-align: center;
+  }
+
+  .phase-connector {
+    position: absolute;
+    top: 22px;
+    left: 50%;
+    right: -50%;
+    height: 3px;
+    background: rgba(255,255,255,0.08);
+    z-index: 0;
+  }
+
+  .phase-connector.done { background: linear-gradient(90deg, #7c3aed, #4f46e5); }
+  .phase-connector.active { background: linear-gradient(90deg, #4f46e5, rgba(79,70,229,0.2)); }
+
+  .phase-dot {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.06);
+    border: 2px solid rgba(255,255,255,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    margin: 0 auto 10px;
+    position: relative;
+    z-index: 1;
+    transition: all 0.3s;
+  }
+
+  .phase-dot.done {
+    background: rgba(124,58,237,0.3);
+    border-color: #7c3aed;
+    box-shadow: 0 0 12px rgba(124,58,237,0.3);
+  }
+
+  .phase-dot.active {
+    background: rgba(167,139,250,0.2);
+    border-color: #a78bfa;
+    box-shadow: 0 0 16px rgba(167,139,250,0.4);
+    animation: glow 2s ease-in-out infinite;
+  }
+
+  @keyframes glow {
+    0%, 100% { box-shadow: 0 0 16px rgba(167,139,250,0.4); }
+    50% { box-shadow: 0 0 24px rgba(167,139,250,0.6); }
+  }
+
+  .phase-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #ccccdd;
+    margin-bottom: 3px;
+  }
+
+  .phase-weeks {
+    font-size: 11px;
+    color: #666688;
+    margin-bottom: 3px;
+  }
+
+  .phase-target {
+    font-size: 12px;
+    font-weight: 600;
+    color: #a78bfa;
+  }
+
+  /* 更新体重按钮 */
+  .update-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: linear-gradient(135deg, rgba(124,58,237,0.3), rgba(79,70,229,0.3));
+    border: 1px solid rgba(124,58,237,0.4);
+    border-radius: 12px;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #a78bfa;
+    cursor: pointer;
+    transition: all 0.3s;
+    user-select: none;
+  }
+
+  .update-btn:hover {
+    background: linear-gradient(135deg, rgba(124,58,237,0.5), rgba(79,70,229,0.5));
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(124,58,237,0.25);
+  }
+
+  /* 弹窗 */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(8px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+
+  .modal-overlay.show { display: flex; }
+
+  .modal {
+    background: #1a1a2e;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 20px;
+    padding: 28px;
+    width: 320px;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+  }
+
+  .modal h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #e8e8f0;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+
+  .modal input {
+    width: 100%;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 12px;
+    padding: 12px 16px;
+    font-size: 20px;
+    color: #e8e8f0;
+    text-align: center;
+    outline: none;
+    margin-bottom: 16px;
+    font-family: inherit;
+  }
+
+  .modal input:focus { border-color: rgba(167,139,250,0.5); }
+
+  .modal-btns {
+    display: flex;
+    gap: 10px;
+  }
+
+  .btn-cancel, .btn-confirm {
+    flex: 1;
+    padding: 12px;
+    border-radius: 12px;
+    border: none;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+  }
+
+  .btn-cancel {
+    background: rgba(255,255,255,0.06);
+    color: #8888aa;
+  }
+
+  .btn-confirm {
+    background: linear-gradient(135deg, #7c3aed, #4f46e5);
+    color: #fff;
+  }
+
+  .btn-confirm:hover { opacity: 0.9; transform: translateY(-1px); }
+
+  /* 底部状态栏 */
+  .status-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #555577;
+    padding: 16px 0 8px;
+  }
+
+  .status-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #34d399;
+    animation: blink 2s ease-in-out infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  /* 流星动画 */
+  .star {
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    animation: twinkle var(--duration) ease-in-out infinite;
+    opacity: var(--opacity);
+  }
+
+  @keyframes twinkle {
+    0%, 100% { opacity: var(--opacity); transform: scale(1); }
+    50% { opacity: calc(var(--opacity) * 0.3); transform: scale(0.7); }
+  }
+
+  /* 响应式 */
+  @media (max-width: 700px) {
+    .cards-row, .coaches-grid, .tasks-section { grid-template-columns: 1fr; }
+    .weight-display { flex-direction: column; gap: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== 密码保护蒙层 ===== -->
+<div id="pwd-overlay" style="
+  display:flex; position:fixed; inset:0; z-index:99999;
+  background:linear-gradient(135deg,#0f0f1a 0%,#1a0a2e 50%,#0f0f1a 100%);
+  align-items:center; justify-content:center; flex-direction:column;
+  font-family:-apple-system,'PingFang SC','Helvetica Neue',sans-serif;
+">
+  <div style="
+    background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1);
+    border-radius:24px; padding:40px 36px; width:90%; max-width:360px;
+    text-align:center; backdrop-filter:blur(20px);
+    box-shadow:0 20px 60px rgba(120,60,180,0.3);
+  ">
+    <div style="font-size:48px;margin-bottom:16px;">🔐</div>
+    <h2 style="
+      font-size:22px; font-weight:700; margin-bottom:8px;
+      background:linear-gradient(135deg,#f8b4d9,#a78bfa,#60a5fa);
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+    ">蓓蓓的专属空间</h2>
+    <p style="color:#8888aa; font-size:13px; margin-bottom:28px;">请输入访问密码</p>
+    <input id="pwd-input" type="password" placeholder="输入密码…" style="
+      width:100%; padding:14px 18px; border-radius:12px; border:1px solid rgba(255,255,255,0.15);
+      background:rgba(255,255,255,0.06); color:#e8e8f0; font-size:16px;
+      outline:none; margin-bottom:16px; box-sizing:border-box; text-align:center;
+      letter-spacing:3px;
+    " onkeydown="if(event.key==='Enter')checkPwd()">
+    <button onclick="checkPwd()" style="
+      width:100%; padding:14px; border-radius:12px; border:none; cursor:pointer;
+      background:linear-gradient(135deg,#7c3aed,#4f46e5); color:#fff;
+      font-size:16px; font-weight:600; transition:opacity 0.2s;
+    " onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">进入 ✨</button>
+    <p id="pwd-err" style="color:#f87171; font-size:13px; margin-top:12px; min-height:20px; opacity:0; transition:opacity 0.3s;"></p>
+  </div>
+  <p style="color:#444466; font-size:12px; margin-top:24px;">蓓蓓的蜕变计划 · 私密访问</p>
+</div>
+
+<!-- ===== 页面导航条 ===== -->
+<div id="page-nav" style="
+  display:none; position:fixed; bottom:0; left:0; right:0; z-index:9999;
+  background:rgba(15,15,26,0.92); backdrop-filter:blur(20px);
+  border-top:1px solid rgba(255,255,255,0.08);
+  padding:10px 0 env(safe-area-inset-bottom,10px);
+">
+  <div style="display:flex; justify-content:space-around; max-width:500px; margin:0 auto;">
+    <a href="dashboard.html" style="
+      display:flex; flex-direction:column; align-items:center; text-decoration:none;
+      color:#a78bfa; padding:4px 12px;
+    ">
+      <span style="font-size:20px;">📊</span>
+      <span style="font-size:11px; margin-top:2px; font-weight:600;">每日看板</span>
+    </a>
+    <a href="week1-plan.html" style="
+      display:flex; flex-direction:column; align-items:center; text-decoration:none;
+      color:#8888aa; padding:4px 12px;
+    ">
+      <span style="font-size:20px;">📅</span>
+      <span style="font-size:11px; margin-top:2px;">第一周计划</span>
+    </a>
+    <a href="外形提升一年计划.html" style="
+      display:flex; flex-direction:column; align-items:center; text-decoration:none;
+      color:#8888aa; padding:4px 12px;
+    ">
+      <span style="font-size:20px;">🌟</span>
+      <span style="font-size:11px; margin-top:2px;">一年计划</span>
+    </a>
+  </div>
+</div>
+
+<script>
+(function(){
+  const HASH = '9e12e7a4f041155a9827d9b8c49a09fc7cb0e346eb516c9724dc0f08337f4930';
+  async function sha256(msg){
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(msg));
+    return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+  }
+  function unlock(){
+    document.getElementById('pwd-overlay').style.display='none';
+    document.getElementById('page-nav').style.display='block';
+    document.body.style.paddingBottom='70px';
+  }
+  window.checkPwd = async function(){
+    const val = document.getElementById('pwd-input').value.trim();
+    const err = document.getElementById('pwd-err');
+    if(!val) return;
+    const h = await sha256(val);
+    if(h === HASH){
+      sessionStorage.setItem('beibei_auth','1');
+      unlock();
+    } else {
+      err.textContent = '密码不对，再想想 🤔'; err.style.opacity='1';
+      const inp = document.getElementById('pwd-input');
+      inp.style.borderColor='#f87171';
+      setTimeout(()=>{err.style.opacity='0'; inp.style.borderColor='rgba(255,255,255,0.15)';},2500);
+    }
+  };
+  if(sessionStorage.getItem('beibei_auth')==='1'){ unlock(); }
+})();
+</script>
+
+<!-- 星星背景 -->
+<div id="stars-container"></div>
+
+<div class="container">
+
+  <!-- 顶部标题 -->
+  <div class="header">
+    <div class="header-left">
+      <h1>✨ 蓓蓓的蜕变计划</h1>
+      <p id="header-date">加载中...</p>
+    </div>
+    <div class="header-right">
+      <div class="day-badge" id="day-badge">Day 1</div>
+      <div class="date-text">下次汇报：<span id="next-report">3天后</span></div>
+    </div>
+  </div>
+
+  <!-- 体重进度 -->
+  <div class="weight-section">
+    <div class="section-title">⚖️ 减重进度</div>
+    <div class="weight-display">
+      <div class="weight-current">
+        <div class="weight-number" id="current-weight">90.0</div>
+        <div class="weight-unit">kg · 当前体重</div>
+      </div>
+      <div class="weight-stats">
+        <div class="weight-stat">
+          <div class="weight-stat-label">起点</div>
+          <div class="weight-stat-value">90 kg</div>
+        </div>
+        <div class="weight-stat">
+          <div class="weight-stat-label">已减</div>
+          <div class="weight-stat-value green" id="lost-weight">0.0 kg</div>
+        </div>
+        <div class="weight-stat">
+          <div class="weight-stat-label">距目标</div>
+          <div class="weight-stat-value orange" id="to-go">28.0 kg</div>
+        </div>
+        <div class="weight-stat">
+          <div class="weight-stat-label">完成率</div>
+          <div class="weight-stat-value" id="pct">0%</div>
+        </div>
+      </div>
+    </div>
+    <div class="progress-area">
+      <div class="progress-labels">
+        <span>90 kg 出发 🏁</span>
+        <span>🎯 目标 62 kg</span>
+      </div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" id="main-progress" style="width:0%"></div>
+      </div>
+    </div>
+
+    <!-- 月度里程碑 -->
+    <div class="milestones" id="milestones-row"></div>
+
+    <div style="margin-top:16px;">
+      <button class="update-btn" onclick="openWeightModal()">
+        ✏️ 更新今日体重
+      </button>
+    </div>
+  </div>
+
+  <!-- 三状态卡 -->
+  <div class="cards-row">
+    <div class="status-card exercise" onclick="addExercise()">
+      <div class="card-icon">🏃‍♀️</div>
+      <div class="card-title">本周运动</div>
+      <div class="card-value" id="exercise-count">0</div>
+      <div class="card-hint">次 · 目标 4次 · 点击 +1</div>
+    </div>
+    <div class="status-card style" onclick="addStyle()">
+      <div class="card-icon">👗</div>
+      <div class="card-title">本周穿搭打卡</div>
+      <div class="card-value" id="style-count">0</div>
+      <div class="card-hint">天 · 目标 5天 · 点击 +1</div>
+    </div>
+    <div class="status-card mood" onclick="cycleMood()">
+      <div class="card-icon" id="mood-emoji">😐</div>
+      <div class="card-title">今日情绪</div>
+      <div class="card-value" id="mood-text" style="font-size:14px;color:#a78bfa;">一般</div>
+      <div class="card-hint">点击切换心情</div>
+    </div>
+  </div>
+
+  <!-- Coach 团队 -->
+  <div class="coaches-section">
+    <div class="coaches-title">🤝 我的专属 Coach 团队</div>
+    <div class="coaches-grid">
+
+      <!-- Max -->
+      <div class="coach-card max">
+        <div class="coach-avatar">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <radialGradient id="bgMax" cx="50%" cy="40%">
+                <stop offset="0%" stop-color="#1e3a5f"/>
+                <stop offset="100%" stop-color="#0d1f3c"/>
+              </radialGradient>
+            </defs>
+            <rect width="100" height="100" fill="url(#bgMax)"/>
+            <!-- 身体 -->
+            <ellipse cx="50" cy="100" rx="28" ry="20" fill="#1a3a6b"/>
+            <!-- 运动服 -->
+            <ellipse cx="50" cy="82" rx="22" ry="16" fill="#1d4ed8"/>
+            <rect x="28" y="72" width="44" height="20" rx="4" fill="#1d4ed8"/>
+            <!-- 线条装饰 -->
+            <line x1="40" y1="72" x2="38" y2="88" stroke="#60a5fa" stroke-width="1.5" opacity="0.6"/>
+            <line x1="60" y1="72" x2="62" y2="88" stroke="#60a5fa" stroke-width="1.5" opacity="0.6"/>
+            <!-- 脖子 -->
+            <rect x="44" y="57" width="12" height="14" rx="4" fill="#e8b89a"/>
+            <!-- 头 -->
+            <ellipse cx="50" cy="50" rx="22" ry="24" fill="#e8b89a"/>
+            <!-- 头发 -->
+            <ellipse cx="50" cy="30" rx="22" ry="10" fill="#1a1a1a"/>
+            <ellipse cx="50" cy="28" rx="20" ry="12" fill="#222222"/>
+            <ellipse cx="36" cy="36" rx="7" ry="10" fill="#1a1a1a"/>
+            <ellipse cx="64" cy="36" rx="7" ry="10" fill="#1a1a1a"/>
+            <!-- 眉毛 -->
+            <path d="M38 43 Q43 40 48 43" stroke="#3d2b1a" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <path d="M52 43 Q57 40 62 43" stroke="#3d2b1a" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <!-- 眼睛 -->
+            <ellipse cx="43" cy="47" rx="4" ry="4.5" fill="#fff"/>
+            <ellipse cx="57" cy="47" rx="4" ry="4.5" fill="#fff"/>
+            <circle cx="44" cy="47" r="2.5" fill="#2c2c2c"/>
+            <circle cx="58" cy="47" r="2.5" fill="#2c2c2c"/>
+            <circle cx="45" cy="46" r="0.8" fill="#fff"/>
+            <circle cx="59" cy="46" r="0.8" fill="#fff"/>
+            <!-- 鼻子 -->
+            <ellipse cx="50" cy="54" rx="2" ry="1.5" fill="#d4956a"/>
+            <!-- 嘴 自信微笑 -->
+            <path d="M43 60 Q50 65 57 60" stroke="#c0784a" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <!-- 耳朵 -->
+            <ellipse cx="28" cy="49" rx="4" ry="5" fill="#e8b89a"/>
+            <ellipse cx="72" cy="49" rx="4" ry="5" fill="#e8b89a"/>
+          </svg>
+        </div>
+        <div class="coach-name">Max</div>
+        <div class="coach-role">💪 健康 & 减重教练</div>
+        <div class="coach-personality">
+          <span class="tag">直接</span>
+          <span class="tag">数据控</span>
+          <span class="tag">靠谱</span>
+          <span class="tag">不废话</span>
+        </div>
+        <div class="coach-quote">"数据不会说谎。把这周的运动和饮食告诉我，我给你下一步怎么做。"</div>
+      </div>
+
+      <!-- Lily -->
+      <div class="coach-card lily">
+        <div class="coach-avatar">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <radialGradient id="bgLily" cx="50%" cy="40%">
+                <stop offset="0%" stop-color="#3d1a2e"/>
+                <stop offset="100%" stop-color="#1a0d1a"/>
+              </radialGradient>
+            </defs>
+            <rect width="100" height="100" fill="url(#bgLily)"/>
+            <!-- 身体 -->
+            <ellipse cx="50" cy="100" rx="28" ry="20" fill="#4a1535"/>
+            <!-- 衣服 米色西装 -->
+            <ellipse cx="50" cy="82" rx="22" ry="16" fill="#d4a080"/>
+            <rect x="28" y="72" width="44" height="20" rx="4" fill="#d4a080"/>
+            <!-- 领口细节 -->
+            <path d="M44 72 L50 80 L56 72" fill="#c09060" stroke="none"/>
+            <!-- 耳环 -->
+            <circle cx="28" cy="52" r="3" fill="#f8d878" opacity="0.9"/>
+            <circle cx="72" cy="52" r="3" fill="#f8d878" opacity="0.9"/>
+            <!-- 脖子 -->
+            <rect x="44" y="57" width="12" height="14" rx="4" fill="#f0cba8"/>
+            <!-- 头 -->
+            <ellipse cx="50" cy="50" rx="21" ry="23" fill="#f0cba8"/>
+            <!-- 头发 - 优雅中长发 -->
+            <ellipse cx="50" cy="30" rx="22" ry="14" fill="#1a0d0d"/>
+            <ellipse cx="50" cy="27" rx="20" ry="13" fill="#221010"/>
+            <path d="M29 38 Q25 55 28 68 Q32 62 35 55 Z" fill="#1a0d0d"/>
+            <path d="M71 38 Q75 55 72 68 Q68 62 65 55 Z" fill="#1a0d0d"/>
+            <!-- 眉毛 精致弓形 -->
+            <path d="M38 42 Q43 38 48 41" stroke="#5c3018" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+            <path d="M52 41 Q57 38 62 42" stroke="#5c3018" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+            <!-- 眼睛 -->
+            <ellipse cx="42" cy="47" rx="4.5" ry="4" fill="#fff"/>
+            <ellipse cx="58" cy="47" rx="4.5" ry="4" fill="#fff"/>
+            <circle cx="43" cy="47" r="2.8" fill="#2c1810"/>
+            <circle cx="59" cy="47" r="2.8" fill="#2c1810"/>
+            <circle cx="44" cy="46" r="0.9" fill="#fff"/>
+            <circle cx="60" cy="46" r="0.9" fill="#fff"/>
+            <!-- 眼线 -->
+            <path d="M37.5 45 Q42 43 46.5 45" stroke="#1a0808" stroke-width="1" fill="none"/>
+            <path d="M53.5 45 Q58 43 62.5 45" stroke="#1a0808" stroke-width="1" fill="none"/>
+            <!-- 鼻子 -->
+            <ellipse cx="50" cy="53" rx="2" ry="1.5" fill="#d4956a"/>
+            <!-- 嘴 口红 微笑 -->
+            <path d="M44 59 Q50 64 56 59" stroke="#e05080" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            <!-- 唇峰 -->
+            <path d="M44 59 Q47 56 50 59 Q53 56 56 59" fill="#e05080" opacity="0.6"/>
+            <!-- 耳朵 -->
+            <ellipse cx="29" cy="49" rx="4" ry="5" fill="#f0cba8"/>
+            <ellipse cx="71" cy="49" rx="4" ry="5" fill="#f0cba8"/>
+          </svg>
+        </div>
+        <div class="coach-name">Lily</div>
+        <div class="coach-role">👗 穿搭 & 妆容顾问</div>
+        <div class="coach-personality">
+          <span class="tag">品位独到</span>
+          <span class="tag">具体建议</span>
+          <span class="tag">时尚感</span>
+          <span class="tag">懂你</span>
+        </div>
+        <div class="coach-quote">"穿搭不是消费，是自我表达。这周衣橱里翻出了什么？跟我说说。"</div>
+      </div>
+
+      <!-- Luna -->
+      <div class="coach-card luna">
+        <div class="coach-avatar">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <radialGradient id="bgLuna" cx="50%" cy="40%">
+                <stop offset="0%" stop-color="#1a1035"/>
+                <stop offset="100%" stop-color="#0d0820"/>
+              </radialGradient>
+            </defs>
+            <rect width="100" height="100" fill="url(#bgLuna)"/>
+            <!-- 星星装饰 -->
+            <circle cx="20" cy="20" r="1.5" fill="#a78bfa" opacity="0.8"/>
+            <circle cx="80" cy="25" r="1" fill="#c4b5fd" opacity="0.6"/>
+            <circle cx="15" cy="70" r="1" fill="#ddd6fe" opacity="0.5"/>
+            <!-- 身体 -->
+            <ellipse cx="50" cy="100" rx="28" ry="20" fill="#2d1b5e"/>
+            <!-- 薰衣草毛衣 -->
+            <ellipse cx="50" cy="82" rx="22" ry="16" fill="#8b7ab8"/>
+            <rect x="28" y="72" width="44" height="20" rx="6" fill="#9b88c8"/>
+            <!-- 纹理 -->
+            <line x1="28" y1="76" x2="72" y2="76" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+            <line x1="28" y1="80" x2="72" y2="80" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+            <!-- 脖子 -->
+            <rect x="44" y="57" width="12" height="14" rx="4" fill="#f2d4c0"/>
+            <!-- 头 -->
+            <ellipse cx="50" cy="50" rx="21" ry="23" fill="#f2d4c0"/>
+            <!-- 头发 - 柔软波浪 -->
+            <ellipse cx="50" cy="29" rx="23" ry="13" fill="#3d2010"/>
+            <ellipse cx="50" cy="26" rx="21" ry="14" fill="#4a2815"/>
+            <path d="M29 36 Q24 52 27 66 Q31 60 34 53 Z" fill="#3d2010"/>
+            <path d="M71 36 Q76 52 73 66 Q69 60 66 53 Z" fill="#3d2010"/>
+            <!-- 发丝细节 -->
+            <path d="M33 28 Q30 38 31 48" stroke="#5a3420" stroke-width="1.5" fill="none" opacity="0.5"/>
+            <path d="M67 28 Q70 38 69 48" stroke="#5a3420" stroke-width="1.5" fill="none" opacity="0.5"/>
+            <!-- 眉毛 温柔弧形 -->
+            <path d="M39 43 Q44 40 49 43" stroke="#5c3018" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            <path d="M51 43 Q56 40 61 43" stroke="#5c3018" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            <!-- 眼睛 温柔大眼 -->
+            <ellipse cx="43" cy="48" rx="5" ry="4.5" fill="#fff"/>
+            <ellipse cx="57" cy="48" rx="5" ry="4.5" fill="#fff"/>
+            <circle cx="44" cy="48" r="3" fill="#3d2820"/>
+            <circle cx="58" cy="48" r="3" fill="#3d2820"/>
+            <circle cx="45" cy="47" r="1" fill="#fff"/>
+            <circle cx="59" cy="47" r="1" fill="#fff"/>
+            <!-- 眼睫毛 -->
+            <path d="M38 44 Q43 40 48 44" stroke="#2c1810" stroke-width="1" fill="none"/>
+            <path d="M52 44 Q57 40 62 44" stroke="#2c1810" stroke-width="1" fill="none"/>
+            <!-- 鼻子 -->
+            <ellipse cx="50" cy="54" rx="2" ry="1.5" fill="#d4956a"/>
+            <!-- 嘴 温柔微笑 -->
+            <path d="M44 61 Q50 66 56 61" stroke="#c07870" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <!-- 月牙耳环 -->
+            <path d="M27 50 Q24 53 27 56" stroke="#c4b5fd" stroke-width="1.5" fill="none"/>
+            <path d="M73 50 Q76 53 73 56" stroke="#c4b5fd" stroke-width="1.5" fill="none"/>
+            <!-- 耳朵 -->
+            <ellipse cx="29" cy="50" rx="4" ry="5" fill="#f2d4c0"/>
+            <ellipse cx="71" cy="50" rx="4" ry="5" fill="#f2d4c0"/>
+          </svg>
+        </div>
+        <div class="coach-name">Luna</div>
+        <div class="coach-role">🌙 情绪 & 心理陪伴</div>
+        <div class="coach-personality">
+          <span class="tag">温柔</span>
+          <span class="tag">不评判</span>
+          <span class="tag">有洞察</span>
+          <span class="tag">陪着你</span>
+        </div>
+        <div class="coach-quote">"你上次从110减到70，靠的是你自己。那份力量还在。我就在这里，随时可以说说心里的话。"</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 今日任务 & 本周计划 -->
+  <div class="tasks-section">
+    <!-- 今日任务 -->
+    <div class="tasks-card">
+      <div class="tasks-header">
+        <div class="tasks-header-left">📌 今日优先任务</div>
+        <div class="tasks-count" id="tasks-count">0/5 完成</div>
+      </div>
+      <div id="tasks-list">
+        <div class="task-item" onclick="toggleTask(this)">
+          <div class="task-checkbox">✓</div>
+          <div class="task-text">⚖️ 早晨称重并记录</div>
+          <div class="task-priority priority-high">必做</div>
+        </div>
+        <div class="task-item" onclick="toggleTask(this)">
+          <div class="task-checkbox">✓</div>
+          <div class="task-text">🥗 控制热量（1400-1600 kcal），蛋白质优先</div>
+          <div class="task-priority priority-high">必做</div>
+        </div>
+        <div class="task-item" onclick="toggleTask(this)">
+          <div class="task-checkbox">✓</div>
+          <div class="task-text">🚶 有氧运动 30-45 分钟（快走/椭圆机）</div>
+          <div class="task-priority priority-mid">本周</div>
+        </div>
+        <div class="task-item" onclick="toggleTask(this)">
+          <div class="task-checkbox">✓</div>
+          <div class="task-text">👗 今天穿搭有没有用心？拍张照</div>
+          <div class="task-priority priority-low">风格</div>
+        </div>
+        <div class="task-item" onclick="toggleTask(this)">
+          <div class="task-checkbox">✓</div>
+          <div class="task-text">💧 喝够 2L 水，睡前不吃东西</div>
+          <div class="task-priority priority-mid">习惯</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 汇报倒计时 -->
+    <div class="tasks-card">
+      <div class="tasks-header">
+        <div class="tasks-header-left">📊 Coach 汇报</div>
+        <div class="tasks-count">每 3 天一次</div>
+      </div>
+      <div style="text-align:center; padding: 16px 0 8px;">
+        <div style="font-size: 56px; font-weight: 800; background: linear-gradient(135deg, #a78bfa, #60a5fa); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; line-height:1;" id="countdown-days">3</div>
+        <div style="font-size: 13px; color: #8888aa; margin-top: 6px; margin-bottom: 20px;">天后汇报</div>
+        <div style="font-size: 13px; color: #666688; line-height: 1.8; text-align:left; padding: 0 4px;">
+          发送格式：<br>
+          <span style="color:#a78bfa; font-weight:600;">Coach汇报：</span><br>
+          📊 体重 XX kg<br>
+          🏃 运动 X 次，做了什么<br>
+          🥗 饮食情况<br>
+          👗 穿搭/妆容进展<br>
+          💙 情绪状态
+        </div>
+      </div>
+      <div style="margin-top: 12px; padding: 12px; background: rgba(167,139,250,0.06); border-radius: 10px; border: 1px solid rgba(167,139,250,0.15);">
+        <div style="font-size: 11px; color: #8888aa; margin-bottom: 6px; font-weight: 600;">COACH 团队</div>
+        <div style="font-size: 12px; color: #ccccdd; line-height: 1.8;">
+          💪 <span style="color:#60a5fa;">Max</span> — 饮食·运动·体重<br>
+          👗 <span style="color:#f8b4d9;">Lily</span> — 穿搭·妆容<br>
+          🌙 <span style="color:#a78bfa;">Luna</span> — 情绪·陪伴
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 一年旅程 -->
+  <div class="journey-section">
+    <div class="section-title">🗺️ 一年蜕变路线图</div>
+    <div class="journey-track" id="journey-track">
+
+      <div class="journey-phase">
+        <div class="phase-connector active"></div>
+        <div class="phase-dot active">🔥</div>
+        <div class="phase-label">重启出发</div>
+        <div class="phase-weeks">W1 – W8</div>
+        <div class="phase-target" style="color:#f97316;">90→75 kg</div>
+        <div style="font-size:10px;color:#666688;margin-top:3px;">前2月各减10斤</div>
+      </div>
+
+      <div class="journey-phase">
+        <div class="phase-connector"></div>
+        <div class="phase-dot">💜</div>
+        <div class="phase-label">加速养成</div>
+        <div class="phase-weeks">W9 – W24</div>
+        <div class="phase-target" style="color:#a78bfa;">75→68 kg</div>
+        <div style="font-size:10px;color:#666688;margin-top:3px;">每月3-4斤节奏</div>
+      </div>
+
+      <div class="journey-phase">
+        <div class="phase-connector"></div>
+        <div class="phase-dot">💙</div>
+        <div class="phase-label">精修塑形</div>
+        <div class="phase-weeks">W25 – W36</div>
+        <div class="phase-target" style="color:#60a5fa;">68→65 kg</div>
+        <div style="font-size:10px;color:#666688;margin-top:3px;">稳步精细调整</div>
+      </div>
+
+      <div class="journey-phase">
+        <div class="phase-dot">💚</div>
+        <div class="phase-label">稳固蜕变</div>
+        <div class="phase-weeks">W37 – W52</div>
+        <div class="phase-target" style="color:#34d399;">65→62 kg</div>
+        <div style="font-size:10px;color:#666688;margin-top:3px;">习惯内化 成为她</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 底部 -->
+  <div class="status-bar">
+    <div class="status-dot"></div>
+    Coach 团队在线 · 随时汇报 · 蓓蓓加油 ✨
+  </div>
+
+</div>
+
+<!-- 更新体重弹窗 -->
+<div class="modal-overlay" id="weight-modal">
+  <div class="modal">
+    <h3>⚖️ 更新今日体重</h3>
+    <input type="number" id="weight-input" placeholder="例如：89.5" step="0.1" min="40" max="200"/>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeWeightModal()">取消</button>
+      <button class="btn-confirm" onclick="confirmWeight()">确认记录</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ——— 数据存储 ———
+const STORAGE = {
+  get: (key, def) => { try { const v = localStorage.getItem('beibei_' + key); return v !== null ? JSON.parse(v) : def; } catch(e) { return def; } },
+  set: (key, val) => { try { localStorage.setItem('beibei_' + key, JSON.stringify(val)); } catch(e) {} }
+};
+
+// ——— 初始化数据 ———
+const START_DATE = STORAGE.get('start_date', new Date().toISOString().slice(0,10));
+if (!STORAGE.get('start_date', null)) STORAGE.set('start_date', START_DATE);
+const START_WEIGHT = 90;
+const GOAL_WEIGHT = 62;
+
+// ——— 月度里程碑（前2月各减10斤≈5kg，后续放缓）———
+const MILESTONES = [
+  { month: '第1月', weight: 85.0, loss: '-5.0 kg', note: '减10斤' },
+  { month: '第2月', weight: 80.0, loss: '-5.0 kg', note: '减10斤' },
+  { month: '第4月', weight: 75.5, loss: '-4.5 kg', note: '稳步' },
+  { month: '第6月', weight: 72.0, loss: '-3.5 kg', note: '节奏' },
+  { month: '第8月', weight: 68.5, loss: '-3.5 kg', note: '精修' },
+  { month: '第10月', weight: 65.0, loss: '-3.5 kg', note: '塑形' },
+  { month: '第12月', weight: 62.0, loss: '-3.0 kg', note: '✅ 达标!' },
+];
+
+// 情绪列表
+const MOODS = [
+  { emoji: '😫', text: '很累很崩' },
+  { emoji: '😞', text: '有点低落' },
+  { emoji: '😐', text: '一般' },
+  { emoji: '🙂', text: '还不错' },
+  { emoji: '😊', text: '心情好' },
+  { emoji: '😄', text: '很棒！' },
+  { emoji: '🌟', text: '超级开心' }
+];
+
+// ——— 状态 ———
+let currentWeight = STORAGE.get('current_weight', START_WEIGHT);
+let exerciseCount = STORAGE.get('exercise_count', 0);
+let styleCount = STORAGE.get('style_count', 0);
+let moodIndex = STORAGE.get('mood_index', 2);
+let reportDay = STORAGE.get('report_start', new Date().toISOString().slice(0,10));
+if (!STORAGE.get('report_start', null)) STORAGE.set('report_start', reportDay);
+
+// ——— 星星背景 ———
+function createStars() {
+  const container = document.getElementById('stars-container');
+  for (let i = 0; i < 80; i++) {
+    const star = document.createElement('div');
+    star.className = 'star';
+    const size = Math.random() * 2 + 1;
+    star.style.cssText = `
+      width: ${size}px; height: ${size}px;
+      left: ${Math.random() * 100}%;
+      top: ${Math.random() * 100}%;
+      background: ${Math.random() > 0.5 ? '#c4b5fd' : '#bfdbfe'};
+      --duration: ${3 + Math.random() * 4}s;
+      --opacity: ${0.2 + Math.random() * 0.6};
+    `;
+    container.appendChild(star);
+  }
+}
+
+// ——— 更新UI ———
+function updateUI() {
+  // 体重数据
+  document.getElementById('current-weight').textContent = currentWeight.toFixed(1);
+  const lost = START_WEIGHT - currentWeight;
+  const toGo = currentWeight - GOAL_WEIGHT;
+  const pct = Math.max(0, Math.min(100, (lost / (START_WEIGHT - GOAL_WEIGHT)) * 100));
+  document.getElementById('lost-weight').textContent = (lost >= 0 ? '-' : '+') + Math.abs(lost).toFixed(1) + ' kg';
+  document.getElementById('to-go').textContent = toGo.toFixed(1) + ' kg';
+  document.getElementById('pct').textContent = pct.toFixed(1) + '%';
+  document.getElementById('main-progress').style.width = pct + '%';
+
+  // 里程碑
+  const milestonesRow = document.getElementById('milestones-row');
+  milestonesRow.innerHTML = MILESTONES.map(m => {
+    const achieved = currentWeight <= m.weight;
+    const isCurrent = !achieved && (MILESTONES.find(mm => currentWeight > mm.weight) === m || 
+      MILESTONES.indexOf(m) === MILESTONES.findIndex(mm => currentWeight > mm.weight));
+    const cls = achieved ? 'achieved' : (isCurrent ? 'current' : '');
+    return `<div class="milestone ${cls}">
+      <div class="milestone-month">${m.month}</div>
+      <div class="milestone-weight">${m.weight} kg</div>
+      <div class="milestone-loss">${achieved ? '✅ ' : ''}${m.note}</div>
+    </div>`;
+  }).join('');
+
+  // 运动 / 穿搭
+  document.getElementById('exercise-count').textContent = exerciseCount;
+  document.getElementById('style-count').textContent = styleCount;
+
+  // 情绪
+  const mood = MOODS[moodIndex];
+  document.getElementById('mood-emoji').textContent = mood.emoji;
+  document.getElementById('mood-text').textContent = mood.text;
+
+  // 日期 & 天数
+  const today = new Date();
+  const start = new Date(START_DATE);
+  const dayNum = Math.floor((today - start) / (1000*60*60*24)) + 1;
+  document.getElementById('day-badge').textContent = 'Day ' + dayNum;
+  document.getElementById('header-date').textContent = today.toLocaleDateString('zh-CN', { year:'numeric', month:'long', day:'numeric', weekday:'long' });
+
+  // 汇报倒计时
+  const reportStart = new Date(reportDay);
+  const daysSince = Math.floor((today - reportStart) / (1000*60*60*24));
+  const daysLeft = Math.max(0, 3 - (daysSince % 3));
+  document.getElementById('countdown-days').textContent = daysLeft === 0 ? '今天' : daysLeft;
+  document.getElementById('next-report').textContent = daysLeft === 0 ? '今天！' : daysLeft + '天后';
+
+  // 任务统计
+  updateTaskCount();
+}
+
+// ——— 交互功能 ———
+function addExercise() {
+  exerciseCount = (exerciseCount + 1) % 8;
+  STORAGE.set('exercise_count', exerciseCount);
+  updateUI();
+  showRipple(event);
+}
+
+function addStyle() {
+  styleCount = (styleCount + 1) % 8;
+  STORAGE.set('style_count', styleCount);
+  updateUI();
+  showRipple(event);
+}
+
+function cycleMood() {
+  moodIndex = (moodIndex + 1) % MOODS.length;
+  STORAGE.set('mood_index', moodIndex);
+  updateUI();
+  showRipple(event);
+}
+
+function openWeightModal() {
+  document.getElementById('weight-modal').classList.add('show');
+  const input = document.getElementById('weight-input');
+  input.value = currentWeight.toFixed(1);
+  input.focus();
+  input.select();
+}
+
+function closeWeightModal() {
+  document.getElementById('weight-modal').classList.remove('show');
+}
+
+function confirmWeight() {
+  const val = parseFloat(document.getElementById('weight-input').value);
+  if (isNaN(val) || val < 40 || val > 200) {
+    document.getElementById('weight-input').style.borderColor = 'rgba(248,113,113,0.6)';
+    return;
+  }
+  currentWeight = val;
+  STORAGE.set('current_weight', currentWeight);
+  closeWeightModal();
+  updateUI();
+}
+
+function toggleTask(el) {
+  el.classList.toggle('done');
+  updateTaskCount();
+}
+
+function updateTaskCount() {
+  const all = document.querySelectorAll('.task-item').length;
+  const done = document.querySelectorAll('.task-item.done').length;
+  document.getElementById('tasks-count').textContent = done + '/' + all + ' 完成';
+}
+
+function showRipple(e) {
+  if (!e || !e.currentTarget) return;
+}
+
+// 键盘事件
+document.getElementById('weight-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') confirmWeight();
+  if (e.key === 'Escape') closeWeightModal();
+});
+
+document.getElementById('weight-modal').addEventListener('click', e => {
+  if (e.target === document.getElementById('weight-modal')) closeWeightModal();
+});
+
+// ——— 启动 ———
+createStars();
+updateUI();
+
+// 每分钟刷新时间显示
+setInterval(updateUI, 60000);
+</script>
+
+</body>
+</html>
