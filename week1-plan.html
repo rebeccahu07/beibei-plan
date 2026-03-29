@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>蓓蓓 · 第一周综合计划</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, 'PingFang SC', 'Helvetica Neue', sans-serif;
+  background: #0f0f1a;
+  color: #e8e8f0;
+  min-height: 100vh;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 15% 40%, rgba(120,60,180,0.12) 0%, transparent 50%),
+    radial-gradient(ellipse at 85% 20%, rgba(60,120,220,0.1) 0%, transparent 50%),
+    radial-gradient(ellipse at 60% 85%, rgba(180,80,120,0.08) 0%, transparent 40%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 28px 20px 48px;
+  position: relative;
+  z-index: 1;
+}
+
+/* 顶部标题 */
+.page-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.page-header h1 {
+  font-size: 28px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #f8b4d9, #a78bfa, #60a5fa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 8px;
+}
+
+.page-header p {
+  font-size: 14px;
+  color: #8888aa;
+}
+
+/* 本周目标汇总 */
+.week-goals {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.goal-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  padding: 18px;
+  text-align: center;
+}
+
+.goal-card .icon { font-size: 28px; margin-bottom: 8px; }
+.goal-card .label { font-size: 11px; color: #8888aa; margin-bottom: 6px; font-weight: 600; letter-spacing: 0.5px; }
+.goal-card .value { font-size: 18px; font-weight: 700; }
+.goal-card.weight .value { color: #fb923c; }
+.goal-card.exercise .value { color: #60a5fa; }
+.goal-card.style .value { color: #f8b4d9; }
+
+/* Coach标签 */
+.coach-tags {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.coach-tag {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.coach-tag.max { background: rgba(96,165,250,0.12); color: #60a5fa; border: 1px solid rgba(96,165,250,0.25); }
+.coach-tag.lily { background: rgba(248,180,217,0.12); color: #f8b4d9; border: 1px solid rgba(248,180,217,0.25); }
+.coach-tag.luna { background: rgba(167,139,250,0.12); color: #a78bfa; border: 1px solid rgba(167,139,250,0.25); }
+
+/* 每日卡片 */
+.day-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 20px;
+  margin-bottom: 16px;
+  overflow: hidden;
+  transition: all 0.3s;
+}
+
+.day-card:hover {
+  background: rgba(255,255,255,0.05);
+  border-color: rgba(255,255,255,0.12);
+}
+
+.day-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 22px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.day-number {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.day-1 .day-number { background: linear-gradient(135deg, rgba(251,146,60,0.3), rgba(251,146,60,0.1)); color: #fb923c; border: 1px solid rgba(251,146,60,0.3); }
+.day-2 .day-number { background: linear-gradient(135deg, rgba(96,165,250,0.3), rgba(96,165,250,0.1)); color: #60a5fa; border: 1px solid rgba(96,165,250,0.3); }
+.day-3 .day-number { background: linear-gradient(135deg, rgba(52,211,153,0.3), rgba(52,211,153,0.1)); color: #34d399; border: 1px solid rgba(52,211,153,0.3); }
+.day-4 .day-number { background: linear-gradient(135deg, rgba(248,180,217,0.3), rgba(248,180,217,0.1)); color: #f8b4d9; border: 1px solid rgba(248,180,217,0.3); }
+.day-5 .day-number { background: linear-gradient(135deg, rgba(167,139,250,0.3), rgba(167,139,250,0.1)); color: #a78bfa; border: 1px solid rgba(167,139,250,0.3); }
+.day-6 .day-number { background: linear-gradient(135deg, rgba(251,191,36,0.3), rgba(251,191,36,0.1)); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3); }
+.day-7 .day-number { background: linear-gradient(135deg, rgba(244,114,182,0.3), rgba(244,114,182,0.1)); color: #f472b6; border: 1px solid rgba(244,114,182,0.3); }
+
+.day-info { flex: 1; }
+.day-title { font-size: 16px; font-weight: 700; color: #e8e8f0; margin-bottom: 4px; }
+.day-subtitle { font-size: 12px; color: #8888aa; }
+
+.day-badges { display: flex; gap: 6px; flex-wrap: wrap; }
+.badge {
+  font-size: 10px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+.badge-run { background: rgba(96,165,250,0.15); color: #60a5fa; }
+.badge-rest { background: rgba(100,100,120,0.15); color: #8888aa; }
+.badge-style { background: rgba(248,180,217,0.15); color: #f8b4d9; }
+.badge-report { background: rgba(167,139,250,0.15); color: #a78bfa; }
+.badge-skin { background: rgba(52,211,153,0.15); color: #34d399; }
+.badge-wardrobe { background: rgba(251,191,36,0.15); color: #fbbf24; }
+
+.day-toggle { font-size: 18px; color: #555577; transition: transform 0.3s; }
+.day-card.open .day-toggle { transform: rotate(180deg); }
+
+/* 展开内容 */
+.day-content {
+  display: none;
+  padding: 0 22px 22px;
+}
+
+.day-card.open .day-content { display: block; }
+
+.content-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.content-section {
+  background: rgba(255,255,255,0.03);
+  border-radius: 14px;
+  padding: 16px;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+.content-section-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.section-max .content-section-title { color: #60a5fa; }
+.section-lily .content-section-title { color: #f8b4d9; }
+.section-luna .content-section-title { color: #a78bfa; }
+
+.section-max { border-top: 2px solid rgba(96,165,250,0.3); }
+.section-lily { border-top: 2px solid rgba(248,180,217,0.3); }
+.section-luna { border-top: 2px solid rgba(167,139,250,0.3); }
+
+.task-list { list-style: none; }
+
+.task-list li {
+  font-size: 13px;
+  color: #ccccdd;
+  line-height: 1.7;
+  padding: 4px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  cursor: pointer;
+  transition: color 0.2s;
+  border-radius: 4px;
+}
+
+.task-list li:last-child { border-bottom: none; }
+.task-list li:hover { color: #fff; }
+.task-list li.done { color: #555577; text-decoration: line-through; }
+
+.task-list li::before {
+  content: '○';
+  font-size: 11px;
+  margin-top: 3px;
+  flex-shrink: 0;
+  color: #555577;
+  transition: all 0.2s;
+}
+
+.task-list li.done::before { content: '✓'; color: #34d399; }
+
+.meal-block {
+  margin-bottom: 10px;
+  padding: 8px 10px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 8px;
+  border-left: 2px solid rgba(96,165,250,0.2);
+}
+
+.meal-time {
+  font-size: 10px;
+  color: #60a5fa;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.meal-food {
+  font-size: 12px;
+  color: #ccccdd;
+  line-height: 1.6;
+}
+
+.meal-kcal {
+  font-size: 10px;
+  color: #555577;
+  margin-top: 3px;
+}
+
+/* 提示卡 */
+.tip-card {
+  background: rgba(167,139,250,0.05);
+  border: 1px solid rgba(167,139,250,0.15);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 12px;
+  color: #c4b5fd;
+  line-height: 1.6;
+  margin-top: 10px;
+  font-style: italic;
+}
+
+/* 周末特别版 */
+.weekend-note {
+  background: rgba(244,114,182,0.05);
+  border: 1px solid rgba(244,114,182,0.2);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-top: 16px;
+  font-size: 13px;
+  color: #fda4af;
+  line-height: 1.7;
+}
+
+/* 总结卡 */
+.week-summary {
+  background: linear-gradient(135deg, rgba(124,58,237,0.1), rgba(79,70,229,0.1));
+  border: 1px solid rgba(124,58,237,0.2);
+  border-radius: 20px;
+  padding: 24px 28px;
+  margin-top: 24px;
+}
+
+.week-summary h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #a78bfa;
+  margin-bottom: 16px;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.summary-item {
+  background: rgba(255,255,255,0.04);
+  border-radius: 12px;
+  padding: 14px;
+  text-align: center;
+}
+
+.summary-item .s-icon { font-size: 22px; margin-bottom: 6px; }
+.summary-item .s-label { font-size: 11px; color: #8888aa; margin-bottom: 4px; }
+.summary-item .s-value { font-size: 16px; font-weight: 700; color: #e8e8f0; }
+
+/* 响应式 */
+@media (max-width: 680px) {
+  .content-grid, .week-goals, .summary-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== 密码保护蒙层 ===== -->
+<div id="pwd-overlay" style="display:flex;position:fixed;inset:0;z-index:99999;background:linear-gradient(135deg,#0f0f1a 0%,#1a0a2e 50%,#0f0f1a 100%);align-items:center;justify-content:center;flex-direction:column;font-family:-apple-system,'PingFang SC','Helvetica Neue',sans-serif;">
+  <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:24px;padding:40px 36px;width:90%;max-width:360px;text-align:center;backdrop-filter:blur(20px);box-shadow:0 20px 60px rgba(120,60,180,0.3);">
+    <div style="font-size:48px;margin-bottom:16px;">🔐</div>
+    <h2 style="font-size:22px;font-weight:700;margin-bottom:8px;background:linear-gradient(135deg,#f8b4d9,#a78bfa,#60a5fa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">蓓蓓的专属空间</h2>
+    <p style="color:#8888aa;font-size:13px;margin-bottom:28px;">请输入访问密码</p>
+    <input id="pwd-input" type="password" placeholder="输入密码…" style="width:100%;padding:14px 18px;border-radius:12px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.06);color:#e8e8f0;font-size:16px;outline:none;margin-bottom:16px;box-sizing:border-box;text-align:center;letter-spacing:3px;" onkeydown="if(event.key==='Enter')checkPwd()">
+    <button onclick="checkPwd()" style="width:100%;padding:14px;border-radius:12px;border:none;cursor:pointer;background:linear-gradient(135deg,#7c3aed,#4f46e5);color:#fff;font-size:16px;font-weight:600;">进入 ✨</button>
+    <p id="pwd-err" style="color:#f87171;font-size:13px;margin-top:12px;min-height:20px;opacity:0;transition:opacity 0.3s;"></p>
+  </div>
+  <p style="color:#444466;font-size:12px;margin-top:24px;">蓓蓓的蜕变计划 · 私密访问</p>
+</div>
+
+<!-- ===== 页面导航条 ===== -->
+<div id="page-nav" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9999;background:rgba(15,15,26,0.92);backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,0.08);padding:10px 0 env(safe-area-inset-bottom,10px);">
+  <div style="display:flex;justify-content:space-around;max-width:500px;margin:0 auto;">
+    <a href="dashboard.html" style="display:flex;flex-direction:column;align-items:center;text-decoration:none;color:#8888aa;padding:4px 12px;">
+      <span style="font-size:20px;">📊</span><span style="font-size:11px;margin-top:2px;">每日看板</span>
+    </a>
+    <a href="week1-plan.html" style="display:flex;flex-direction:column;align-items:center;text-decoration:none;color:#a78bfa;padding:4px 12px;">
+      <span style="font-size:20px;">📅</span><span style="font-size:11px;margin-top:2px;font-weight:600;">第一周计划</span>
+    </a>
+    <a href="外形提升一年计划.html" style="display:flex;flex-direction:column;align-items:center;text-decoration:none;color:#8888aa;padding:4px 12px;">
+      <span style="font-size:20px;">🌟</span><span style="font-size:11px;margin-top:2px;">一年计划</span>
+    </a>
+  </div>
+</div>
+
+<script>
+(function(){
+  const HASH='9e12e7a4f041155a9827d9b8c49a09fc7cb0e346eb516c9724dc0f08337f4930';
+  async function sha256(msg){const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(msg));return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');}
+  function unlock(){document.getElementById('pwd-overlay').style.display='none';document.getElementById('page-nav').style.display='block';document.body.style.paddingBottom='70px';}
+  window.checkPwd=async function(){
+    const val=document.getElementById('pwd-input').value.trim();
+    const err=document.getElementById('pwd-err');
+    if(!val)return;
+    const h=await sha256(val);
+    if(h===HASH){sessionStorage.setItem('beibei_auth','1');unlock();}
+    else{err.textContent='密码不对，再想想 🤔';err.style.opacity='1';const inp=document.getElementById('pwd-input');inp.style.borderColor='#f87171';setTimeout(()=>{err.style.opacity='0';inp.style.borderColor='rgba(255,255,255,0.15)';},2500);}
+  };
+  if(sessionStorage.getItem('beibei_auth')==='1'){unlock();}
+})();
+</script>
+
+<div class="container">
+
+  <!-- 页头 -->
+  <div class="page-header">
+    <h1>🌟 第一周综合执行计划</h1>
+    <p>饮食 · 运动 · 外形提升 · 情绪管理 · 每日具体动作</p>
+  </div>
+
+  <!-- 本周目标 -->
+  <div class="week-goals">
+    <div class="goal-card weight">
+      <div class="icon">⚖️</div>
+      <div class="label">本周体重目标</div>
+      <div class="value">减 1.5–2 kg</div>
+    </div>
+    <div class="goal-card exercise">
+      <div class="icon">🏃‍♀️</div>
+      <div class="label">运动目标</div>
+      <div class="value">4次有氧</div>
+    </div>
+    <div class="goal-card style">
+      <div class="icon">✨</div>
+      <div class="label">外形任务</div>
+      <div class="value">清衣橱 + 基础护肤</div>
+    </div>
+  </div>
+
+  <!-- Coach图例 -->
+  <div class="coach-tags">
+    <span class="coach-tag max">💪 Max — 饮食 · 运动 · 体重</span>
+    <span class="coach-tag lily">👗 Lily — 穿搭 · 妆容</span>
+    <span class="coach-tag luna">🌙 Luna — 情绪 · 心理</span>
+  </div>
+
+  <!-- Day 1 -->
+  <div class="day-card day-1 open" id="day1">
+    <div class="day-header" onclick="toggleDay('day1')">
+      <div class="day-number">1</div>
+      <div class="day-info">
+        <div class="day-title">Day 1 · 星期日 — 启动日</div>
+        <div class="day-subtitle">今天最重要：测量起点数据，建立基础</div>
+      </div>
+      <div class="day-badges">
+        <span class="badge badge-run">轻运动</span>
+        <span class="badge badge-wardrobe">清衣橱</span>
+        <span class="badge badge-skin">护肤启动</span>
+      </div>
+      <div class="day-toggle">▼</div>
+    </div>
+    <div class="day-content">
+      <div class="content-grid">
+        <!-- Max -->
+        <div class="content-section section-max">
+          <div class="content-section-title">💪 MAX · 饮食 & 运动</div>
+          <div class="meal-block">
+            <div class="meal-time">早餐 7–9点</div>
+            <div class="meal-food">2个水煮蛋 + 希腊酸奶100g + 黄瓜1根<br>黑咖啡（不加奶糖）</div>
+            <div class="meal-kcal">约 320 kcal</div>
+          </div>
+          <div class="meal-block">
+            <div class="meal-time">午餐 12–13点</div>
+            <div class="meal-food">外卖：鸡胸肉沙拉 + 油醋汁<br>备注"不要面包丁，酱料少放"</div>
+            <div class="meal-kcal">约 450 kcal</div>
+          </div>
+          <div class="meal-block">
+            <div class="meal-time">晚餐 18–19点</div>
+            <div class="meal-food">外卖：清蒸鱼1条 + 蒜蓉西兰花<br>（不点米饭，备注"少油少盐"）</div>
+            <div class="meal-kcal">约 380 kcal</div>
+          </div>
+          <ul class="task-list">
+            <li onclick="toggle(this)">⚖️ 早起空腹称体重，记下数字</li>
+            <li onclick="toggle(this)">📏 量腰围+臀围（记在手机备忘录）</li>
+            <li onclick="toggle(this)">🚶 饭后快走30分钟（不用跑）</li>
+            <li onclick="toggle(this)">💧 喝够2L水，戒奶茶今天起</li>
+          </ul>
+        </div>
+        <!-- Lily -->
+        <div class="content-section section-lily">
+          <div class="content-section-title">👗 LILY · 穿搭 & 妆容</div>
+          <ul class="task-list">
+            <li onclick="toggle(this)">📸 拍一张今天穿搭全身照（仅自己留档）</li>
+            <li onclick="toggle(this)">🗂️ 打开衣橱，数一下有多少件衣服</li>
+            <li onclick="toggle(this)">❌ 找出3件"超过1年没穿"的衣服准备清理</li>
+            <li onclick="toggle(this)">🪞 检查现有护肤品，看看有啥</li>
+            <li onclick="toggle(this)">📱 小红书搜"30岁女生穿搭风格测试"，随便刷刷找灵感</li>
+          </ul>
+          <div class="tip-card">今天不用买东西，先摸清现状。衣橱里什么都有但不知道穿什么，是衣服太多不是太少。</div>
+        </div>
+        <!-- Luna -->
+        <div class="content-section section-luna">
+          <div class="content-section-title">🌙 LUNA · 情绪 & 心理</div>
+          <ul class="task-list">
+            <li onclick="toggle(this)">✍️ 写下今天启动的感受（1-2句话就够）</li>
+            <li onclick="toggle(this)">💭 想一下：上次反弹最根本的原因是什么？</li>
+            <li onclick="toggle(this)">🎯 定一个"不是数字"的目标：比如"三个月后穿上那条牛仔裤"</li>
+          </ul>
+          <div class="tip-card">你2024年从110→70，那不是运气，是你的能力。这次你带着那段经验重新出发，你已经知道路了。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Day 2 -->
+  <div class="day-card day-2" id="day2">
+    <div class="day-header" onclick="toggleDay('day2')">
+      <div class="day-number">2</div>
+      <div class="day-info">
+        <div class="day-title">Day 2 · 星期一 — 正式开始</div>
+        <div class="day-subtitle">第一次有氧训练 + 确立早餐习惯</div>
+      </div>
+      <div class="day-badges">
+        <span class="badge badge-run">有氧训练</span>
+        <span class="badge badge-skin">护肤日课</span>
+      </div>
+      <div class="day-toggle">▼</div>
+    </div>
+    <div class="day-content">
+      <div class="content-grid">
+        <div class="content-section section-max">
+          <div class="content-section-title">💪 MAX · 饮食 & 运动</div>
+          <div class="meal-block">
+            <div class="meal-time">早餐</div>
+            <div class="meal-food">鸡蛋2个（任意做法）+ 无糖豆浆200ml<br>或便利店：茶叶蛋×2 + 生菜沙拉</div>
+            <div class="meal-kcal">约 280 kcal</div>
+          </div>
+          <div class="meal-block">
+            <div class="meal-time">午餐</div>
+            <div class="meal-food">外卖：日料——刺身拼盘（3-5种）+ 味噌汤<br>不点米饭</div>
+            <div class="meal-kcal">约 420 kcal</div>
+          </div>
+          <div class="meal-block">
+            <div class="meal-time">晚餐</div>
+            <div class="meal-food">外卖：麻辣烫（清汤底）<br>选：牛肉片+豆腐+西兰花+金针菇<br>不要粉/面，少油</div>
+            <div class="meal-kcal">约 380 kcal</div>
+          </div>
+          <ul class="task-list">
+            <li onclick="toggle(this)">🏃 有氧45分钟：快走/慢跑/椭圆机</li>
+            <li onclick="toggle(this)">⚖️ 晨起称重记录</li>
+            <li onclick="toggle(this)">☕ 只喝黑咖啡，不加奶不加糖</li>
+            <li onclick="toggle(this)">💧 全天2L水（可定时提醒）</li>
+          </ul>
+        </div>
+        <div class="content-section section-lily">
+          <div class="content-section-title">👗 LILY · 穿搭 & 妆容</div>
+          <ul class="task-list">
+            <li onclick="toggle(this)">🧴 今早开始执行基础护肤：洗脸→爽肤水→保湿→防晒</li>
+            <li onclick="toggle(this)">🪞 照镜子看看自己平时的气色，记住这个起点</li>
+            <li onclick="toggle(this)">📱 小红书搜"痘痘皮护肤顺序"，了解一下</li>
+            <li onclick="toggle(this)">👗 今天出门，有意识地搭配一套——哪怕只是T恤+直筒裤</li>
+          </ul>
+          <div class="tip-card">护肤比化妆重要。第一周先把护肤做稳，妆容后面再说。好皮肤是最好的底妆。</div>
+        </div>
+        <div class="content-section section-luna">
+          <div class="content-section-title">🌙 LUNA · 情绪 & 心理</div>
+          <ul class="task-list">
+            <li onclick="toggle(this)">☀️ 早上问自己：今天情绪怎么样？（不用分析，就感受）</li>
+            <li onclick="toggle(this)">🚶 运动时不带耳机走10分钟，感受身体</li>
+            <li onclick="toggle(this)">🌙 睡前做1分钟深呼吸：吸4秒/屏4秒/呼6秒</li>
+          </ul>
+          <div class="tip-card">如果今天想吃不该吃的，先喝一杯水，等10分钟。如果10分钟后还想，告诉我是什么情绪触发的。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Day 3 -->
+  <div class="day-card day-3" id="day3">
+    <div class="day-header" onclick="toggleDay('day3')">
+      <div class="day-number">3</div>
+      <div class="day-info">
+        <div class="day-title">Day 3 · 星期二 — 休息恢复日</div>
+        <div class="day-subtitle">身体休息，继续清衣橱 + 第一次Coach汇报</div>
+      </div>
+      <div class="day-badges">
+        <span class="badge badge-rest">休息日</span>
+        <span class="badge badge-report">Coach汇报</span>
+        <span class="badge badge-wardrobe">清衣橱</span>
+      </div>
+      <div class="day-toggle">▼</div>
+    </div>
+    <div class="day-content">
+      <div class="content-grid">
+        <div class="content-section section-max">
+          <div class="content-section-title">💪 MAX · 饮食 & 休息</div>
+          <div class="meal-block">
+            <div class="meal-time">早餐</div>
+            <div class="meal-food">希腊酸奶150g + 蓝莓/草莓少量<br>或水煮蛋2个 + 番茄</div>
+            <div class="meal-kcal">约 260 kcal</div>
+          </div>
+          <div class="meal-block">
+            <div class="meal-time">午餐</div>
+            <div class="meal-food">外卖：烤鸡腿（去皮）+ 烤蔬菜<br>或便当"去掉米饭换双份蔬菜"</div>
+            <div class="meal-kcal">约 440 kcal</div>
+          </div>
+          <div class="meal-block">
+            <div class="meal-time">晚餐</div>
+            <div class="meal-food">外卖：番茄牛腩（少汤汁）+ 炒菠菜<br>或关东煮（鸡蛋/魔芋/豆腐/海鲜）</div>
+            <div class="meal-kcal">约 380 kcal</div>
+          </div>
+          <ul class="task-list">
+            <li onclick="toggle(this)">⚖️ 晨起称重</li>
+            <li onclick="toggle(this)">🧘 今天不做高强度，散步20分钟即可</li>
+            <li onclick="toggle(this)">📊 整理前3天饮食，准备汇报</li>
+            <li onclick="toggle(this)">📢 发Coach汇报（开头写"Coach汇报："）</li>
+          </ul>
+        </div>
+        <div class="content-section section-lily">
+          <div class="content-section-title">👗 LILY · 穿搭 & 妆容</div>
+          <ul class="task-list">
+            <li onclick="toggle(this)">🗂️ 继续清衣橱——按类别分堆：上衣/下装/外套</li>
+            <li onclick="toggle(this)">❌ 淘汰标准：破损、超过2年没穿、不合身且短期不可能穿</li>
+            <li onclick="toggle(this)">📸 拍下"留下来"的衣服，发给我看看现有基础</li>
+            <li onclick="toggle(this)">💄 今天试一下眉毛：眉笔顺着毛发走，填补空隙</li>
+          </ul>
+        </div>
+        <div class="content-section section-luna">
+          <div class="content-section-title">🌙 LUNA · 情绪 & 心理</div>
+          <ul class="task-list">
+            <li onclick="toggle(this)">💬 汇报时诚实写情绪状态，不用说好听的</li>
+            <li onclick="toggle(this)">🌿 今天做一件让自己开心的小事（无关减肥）</li>
+            <li onclick="toggle(this)">📝 有没有想暴食的时刻？记下是几点、在做什么</li>
+          </ul>
+          <div class="tip-card">休息日不是放松饮食，是让肌肉修复。你的身体需要这一天，给它。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Day 4 -->
+  <div class="day-card day-4" id="day4">
+    <div class="day-header" onclick="toggleDay('day4')">
+      <div class="day-number">4</div>
+      <div class="day-info">
+        <div class="day-title">Day 4 · 星期三 — 加一点强度</div>
+        <div class="day-subtitle">第二次有氧，开始建立风格感</div>
+      </div>
+      <div class="day-badges">
+        <span class="badge badge-run">有氧训练</span>
+        <span class="badge badge-style">风格探索</span>
+      </div>
+      <div class="day-toggle">▼</div>
+    </div>
+    <div class="day-content">
+      <div class="content-grid">
+        <div class="content-section section-max">
+          <div class="content-section-title">💪 MAX · 饮食 & 运动</div>
+          <div class="meal-block">
+            <div class="meal-time">早餐</div>
+            <div class="meal-food">即食鸡胸肉1包（超市买）+ 水煮蛋1个<br>+ 黑咖啡</div>
+            <div class="meal-kcal">约 300 kcal</div>
+          </div>
+          <div class="meal-block">
+            <div class="meal-time">午餐</div>
+            <div class="meal-food">外卖：牛肉沙拉 or 烤牛肉便当（不要饭）<br>蔬菜多多</div>
+            <div class="meal-kcal">约 460 kcal</div>
+          </div>
+          <div class="meal-block">
+            <div class="meal-time">晚餐</div>
+            <div class="meal-food">外卖：蒸虾/白灼虾 + 蒜蓉娃娃菜<br>或豆腐鱼头汤（少喝汤）</div>
+            <div class="meal-kcal">约 360 kcal</div>
+          </div>
+          <ul class="task-list">
+            <li onclick="toggle(this)">🏃 有氧50分钟（今天加5分钟）</li>
+            <li onclick="toggle(this)">⚖️ 晨起称重</li>
+            <li onclick="toggle(this)">🥗 午餐蔬菜要占盘子一半以上</li>
+            <li onclick="toggle(this)">🌙 晚上8点后不吃东西</li>
+          </ul>
+        </div>
+        <div class="content-section section-lily">
+          <div class="content-section-title">👗 LILY · 穿搭 & 妆容</div>
+          <ul class="task-list">
+            <li onclick="toggle(this)">📱 找5张你觉得"好看/想穿成这样"的穿搭图存起来</li>
+            <li onclick="toggle(this)">🔍 看这5张图，找共同点：颜色/廓形/风格词</li>
+            <li onclick="toggle(this)">👄 今天试一下口红/唇釉，选一个日常色（裸粉/豆沙）</li>
+            <li onclick="toggle(this)">🧴 睡前：洗脸→精华（如果有）→乳液→眼霜</li>
+          </ul>
+          <div class="tip-card">找灵感不是为了照抄，是为了发现你想成为什么样子的人。</div>
+        </div>
+        <div class="content-section section-luna">
+          <div class="content-section-title">🌙 LUNA · 情绪 & 心理</div>
+          <ul class="task-list">
+            <li onclick="toggle(this)">🏃 运动时可以放让自己兴奋的歌单</li>
+            <li onclick="toggle(this)">🌟 运动后给自己一个小奖励（不是食物，比如追剧1集）</li>
+            <li onclick="toggle(this)">💭 今天有没有觉得"坚持不下去"的瞬间？是什么时刻？</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Day 5 -->
+  <div class="day-card day-5" id="day5">
+    <div class="day-header" onclick="toggleDay('day5')">
+      <div class="day-number">5</div>
+      <div class="day-info">
+        <div class="day-title">Day 5 · 星期四 — 休息 + 习惯巩固</div>
+        <div class="day-subtitle">身体修复，买一件穿搭单品</div>
+      </div>
+      <div class="day-badges">
+        <span class="badge badge-rest">休息日</span>
+        <span class="badge badge-style">购物任务</span>
+      </div>
+      <div class="day-toggle">▼</div>
+    </div>
+    <div class="day-content">
+      <div class="content-grid">
+        <div class="content-section section-max">
+          <div class="content-section-title">💪 MAX · 饮食 & 休息</div>
+          <div class="meal-block">
+            <div class="meal-time">今日饮食原则</div>
+            <div class="meal-food">早餐照常 · 午餐选择蛋白质+蔬菜<br>晚餐可以稍微丰盛一点（但不超1600kcal）<br>可以加一份奶酪（帕玛森30g以内）</div>
+          </div>
+          <ul class="task-list">
+            <li onclick="toggle(this)">⚖️ 晨起称重</li>
+            <li onclick="toggle(this)">🚶 轻松散步 + 拉伸20分钟</li>
+            <li onclick="toggle(this)">🛒 超市/网购：即食鸡胸×5、希腊酸奶×6、坚果小包</li>
+            <li onclick="toggle(this)">📦 整理一下这周的坚果/健康零食备货</li>
+          </ul>
+        </div>
+        <div class="content-section section-lily">
+          <div class="content-section-title">👗 LILY · 购物任务</div>
+          <ul class="task-list">
+            <li onclick="toggle(this)">🛍️ 任务：买一条显腿细的黑色直筒裤（高腰款更好）</li>
+            <li onclick="toggle(this)">👟 或者：买一双简洁的白色运动鞋（百搭神器）</li>
+            <li onclick="toggle(this)">💰 预算：200元以内，不用买贵的，先建立风格感</li>
+            <li onclick="toggle(this)">📸 试穿拍照，给我看效果</li>
+          </ul>
+          <div class="tip-card">黑色直筒裤是减重期最好的朋友——显瘦、百搭、不挑码数。现在买，穿到瘦了还是经典款。</div>
+        </div>
+        <div class="content-section section-luna">
+          <div class="content-section-title">🌙 LUNA · 情绪 & 心理</div>
+          <ul class="task-list">
+            <li onclick="toggle(this)">💆 今天给自己一个"无压力下午"，不想减肥的事</li>
+            <li onclick="toggle(this)">📞 联系一个让你开心的朋友聊聊天</li>
+            <li onclick="toggle(this)">🌙 睡前回顾：这5天哪一天最难熬？为什么？</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Day 6 -->
+  <div class="day-card day-6" id="day6">
+    <div class="day-header" onclick="toggleDay('day6')">
+      <div class="day-number">6</div>
+      <div class="day-info">
+        <div class="day-title">Day 6 · 星期五 — 冲刺有氧</div>
+        <div class="day-subtitle">第三次有氧，穿上新单品出门</div>
+      </div>
+      <div class="day-badges">
+        <span class="badge badge-run">有氧训练</span>
+        <span class="badge badge-style">穿搭实战</span>
+      </div>
+      <div class="day-toggle">▼</div>
+    </div>
+    <div class="day-content">
+      <div class="content-grid">
+        <div class="content-section section-max">
+          <div class="content-section-title">💪 MAX · 饮食 & 运动</div>
+          <div class="meal-block">
+            <div class="meal-time">早餐</div>
+            <div class="meal-food">鸡蛋2个 + 希腊酸奶100g + 黑咖啡</div>
+            <div class="meal-kcal">约 320 kcal</div>
+          </div>
+          <div class="meal-block">
+            <div class="meal-time">午餐</div>
+            <div class="meal-food">外卖：健身餐（鸡胸+糙米+蔬菜）<br>或牛肉沙拉，控制在500kcal</div>
+            <div class="meal-kcal">约 480 kcal</div>
+          </div>
+          <div class="meal-block">
+            <div class="meal-time">晚餐</div>
+            <div class="meal-food">外卖：烤鱼（清淡版）+ 凉拌黄瓜<br>或三文鱼刺身 + 味噌汤</div>
+            <div class="meal-kcal">约 400 kcal</div>
+          </div>
+          <ul class="task-list">
+            <li onclick="toggle(this)">🏃 有氧50分钟（跑步/游泳/动感单车）</li>
+            <li onclick="toggle(this)">⚖️ 晨起称重</li>
+            <li onclick="toggle(this)">💪 运动结束补充蛋白质（即食鸡胸/鸡蛋）</li>
+            <li onclick="toggle(this)">🍺 今晚如果有聚餐：选烤肉/日料，主动说"不喝酒"或喝一杯红酒</li>
+          </ul>
+        </div>
+        <div class="content-section section-lily">
+          <div class="content-section-title">👗 LILY · 穿搭实战</div>
+          <ul class="task-list">
+            <li onclick="toggle(this)">👗 穿上新买的单品出门</li>
+            <li onclick="toggle(this)">💄 今天做一个完整日常妆：防晒+粉底/气垫+眉毛+口红</li>
+            <li onclick="toggle(this)">📸 出门前拍一张全身镜照片</li>
+            <li onclick="toggle(this)">🌟 注意别人的反馈，哪怕只是感觉自己状态更好了</li>
+          </ul>
+          <div class="tip-card">妆容不是为了别人，是让自己每天早上多一点仪式感，多一点"今天要认真活"的感觉。</div>
+        </div>
+        <div class="content-section section-luna">
+          <div class="content-section-title">🌙 LUNA · 情绪 & 心理</div>
+          <ul class="task-list">
+            <li onclick="toggle(this)">🎉 今天是周五，允许自己愉快一点</li>
+            <li onclick="toggle(this)">🍷 如果有聚餐/社交，提前想好应对策略，不用刻意解释在减肥</li>
+            <li onclick="toggle(this)">💙 运动后感受一下：身体有没有轻一点？</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Day 7 -->
+  <div class="day-card day-7" id="day7">
+    <div class="day-header" onclick="toggleDay('day7')">
+      <div class="day-number">7</div>
+      <div class="day-info">
+        <div class="day-title">Day 7 · 周末 — 回顾 + 第二次Coach汇报</div>
+        <div class="day-subtitle">总结本周，调整下周计划</div>
+      </div>
+      <div class="day-badges">
+        <span class="badge badge-run">有氧/拉伸</span>
+        <span class="badge badge-report">Coach汇报</span>
+        <span class="badge badge-style">衣橱完成</span>
+      </div>
+      <div class="day-toggle">▼</div>
+    </div>
+    <div class="day-content">
+      <div class="content-grid">
+        <div class="content-section section-max">
+          <div class="content-section-title">💪 MAX · 周末 & 汇报</div>
+          <div class="meal-block">
+            <div class="meal-time">今日饮食</div>
+            <div class="meal-food">早午餐合并：鸡蛋2个 + 牛肉沙拉<br>晚餐：可以稍微吃好一点（但不暴食）<br>比如：烤肉（去饭，多蔬菜）</div>
+          </div>
+          <ul class="task-list">
+            <li onclick="toggle(this)">⚖️ 本周最终称重，对比Day1</li>
+            <li onclick="toggle(this)">🏃 有氧45分钟 or 拉伸瑜伽（二选一）</li>
+            <li onclick="toggle(this)">📊 整理本周饮食运动数据，准备汇报</li>
+            <li onclick="toggle(this)">📢 发第二次Coach汇报（"Coach汇报："）</li>
+          </ul>
+        </div>
+        <div class="content-section section-lily">
+          <div class="content-section-title">👗 LILY · 衣橱收尾</div>
+          <ul class="task-list">
+            <li onclick="toggle(this)">✅ 完成衣橱整理，清理掉决定不要的衣服</li>
+            <li onclick="toggle(this)">📷 拍一张整理好的衣橱照片（开始的样子值得记录）</li>
+            <li onclick="toggle(this)">📝 列出"衣橱缺什么"的清单（不用立刻买，先列出来）</li>
+            <li onclick="toggle(this)">💅 周末做一次护肤+面膜，给皮肤充个电</li>
+          </ul>
+        </div>
+        <div class="content-section section-luna">
+          <div class="content-section-title">🌙 LUNA · 周回顾</div>
+          <ul class="task-list">
+            <li onclick="toggle(this)">🌟 写下这周最骄傲的一件事（无论多小）</li>
+            <li onclick="toggle(this)">💭 这周最难的时刻是什么？下周如何应对？</li>
+            <li onclick="toggle(this)">🎯 给下周定一个情绪目标（比如：不因无聊而吃东西）</li>
+          </ul>
+          <div class="tip-card">七天不是终点，是开始的证明。你完成了第一周，就证明了这次是认真的。</div>
+        </div>
+      </div>
+
+      <div class="weekend-note">
+        🌸 <strong>周末特别提醒：</strong>周末是最容易崩的两天——社交、无聊、情绪性进食都会出现。提前想好：<br>
+        ① 聚餐选烤肉/日料/火锅（清汤），拒绝烧烤+啤酒的组合<br>
+        ② 无聊想吃东西→先做一件其他的事（散步、洗澡、追剧）<br>
+        ③ 偶尔吃多了没关系，下一顿补回来，不要"破罐破摔"
+      </div>
+    </div>
+  </div>
+
+  <!-- 本周总结 -->
+  <div class="week-summary">
+    <h3>📊 第一周完成后，你应该有的成果</h3>
+    <div class="summary-grid">
+      <div class="summary-item">
+        <div class="s-icon">⚖️</div>
+        <div class="s-label">预期体重变化</div>
+        <div class="s-value">-1.5 ~ -2.0 kg</div>
+      </div>
+      <div class="summary-item">
+        <div class="s-icon">🏃‍♀️</div>
+        <div class="s-label">运动次数</div>
+        <div class="s-value">4次有氧</div>
+      </div>
+      <div class="summary-item">
+        <div class="s-icon">👗</div>
+        <div class="s-label">外形动作</div>
+        <div class="s-value">衣橱整理完成</div>
+      </div>
+      <div class="summary-item">
+        <div class="s-icon">🧴</div>
+        <div class="s-label">护肤习惯</div>
+        <div class="s-value">早晚护肤 × 7天</div>
+      </div>
+      <div class="summary-item">
+        <div class="s-icon">💄</div>
+        <div class="s-label">妆容尝试</div>
+        <div class="s-value">眉毛 + 口红</div>
+      </div>
+      <div class="summary-item">
+        <div class="s-icon">📊</div>
+        <div class="s-label">Coach汇报</div>
+        <div class="s-value">Day3 + Day7</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function toggleDay(id) {
+  const card = document.getElementById(id);
+  card.classList.toggle('open');
+}
+
+function toggle(el) {
+  el.classList.toggle('done');
+}
+</script>
+</body>
+</html>
