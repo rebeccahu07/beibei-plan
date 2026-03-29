@@ -202,6 +202,17 @@
   }
 
   /* 月度目标里程碑 */
+  /* 体重隐藏区域样式 */
+  .weight-hidden-area {
+    filter: blur(6px);
+    transition: filter 0.4s ease;
+    user-select: none;
+  }
+  .weight-hidden-area.unlocked {
+    filter: none;
+    user-select: auto;
+  }
+
   .milestones {
     display: flex;
     gap: 10px;
@@ -912,7 +923,8 @@
           <div id="weight-pin-err" style="font-size:10px;color:#f87171;margin-top:5px;display:none;">密码错误</div>
         </div>
       </div>
-      <div class="weight-stats">
+      <!-- 体重统计（隐藏区域，解锁后显示） -->
+      <div id="weight-stats-wrap" class="weight-stats weight-hidden-area">
         <div class="weight-stat">
           <div class="weight-stat-label">起点</div>
           <div class="weight-stat-value">90 kg</div>
@@ -931,8 +943,12 @@
         </div>
       </div>
     </div>
-    <div class="progress-area">
-      <div class="progress-labels">
+    <div class="progress-area weight-hidden-area" id="progress-area-wrap">
+      <div class="progress-labels" id="progress-labels-fake">
+        <span>●● kg 出发 🏁</span>
+        <span>🎯 目标 ●● kg</span>
+      </div>
+      <div class="progress-labels" id="progress-labels-real" style="display:none;">
         <span>90 kg 出发 🏁</span>
         <span>🎯 目标 62 kg</span>
       </div>
@@ -941,8 +957,8 @@
       </div>
     </div>
 
-    <!-- 月度里程碑 -->
-    <div class="milestones" id="milestones-row"></div>
+    <!-- 月度里程碑（隐藏区域） -->
+    <div class="milestones weight-hidden-area" id="milestones-row"></div>
 
     <div style="margin-top:16px;">
       <button class="update-btn" onclick="openWeightModal()">
@@ -1444,6 +1460,11 @@ function cycleMood() {
 
 // ====== 体重隐藏/解锁逻辑 ======
 const WEIGHT_PIN = '9';  // 解锁密码：数字 9
+let weightLockTimer = null;
+
+function getAllWeightHiddenAreas() {
+  return document.querySelectorAll('.weight-hidden-area');
+}
 
 function showWeightUnlockBox() {
   const box = document.getElementById('weight-unlock-box');
@@ -1464,13 +1485,21 @@ function checkWeightPin() {
   const val = inp.value.trim();
   if (val.length < 1) return;
   if (val === WEIGHT_PIN) {
-    // 正确：显示体重，隐藏遮罩
+    // 正确：解锁所有体重区域
     document.getElementById('current-weight').style.filter = 'none';
     document.getElementById('weight-unlock-box').style.display = 'none';
     document.getElementById('weight-lock-mask').style.display = 'none';
     err.style.display = 'none';
+    // 解锁所有隐藏区域
+    getAllWeightHiddenAreas().forEach(el => el.classList.add('unlocked'));
+    // 切换进度条标签为真实数字
+    const fakeLabels = document.getElementById('progress-labels-fake');
+    const realLabels = document.getElementById('progress-labels-real');
+    if (fakeLabels) fakeLabels.style.display = 'none';
+    if (realLabels) realLabels.style.display = 'flex';
     // 5秒后自动重新上锁
-    setTimeout(lockWeight, 5000);
+    if (weightLockTimer) clearTimeout(weightLockTimer);
+    weightLockTimer = setTimeout(lockWeight, 5000);
   } else {
     // 错误：抖动提示
     err.style.display = 'block';
@@ -1489,7 +1518,14 @@ function lockWeight() {
   document.getElementById('weight-lock-mask').style.display = 'flex';
   document.getElementById('weight-unlock-box').style.display = 'none';
   const inp = document.getElementById('weight-pin-input');
-  if (inp) { inp.value = ''; }
+  if (inp) inp.value = '';
+  // 重新锁定所有隐藏区域
+  getAllWeightHiddenAreas().forEach(el => el.classList.remove('unlocked'));
+  // 切换进度条标签回遮罩版本
+  const fakeLabels = document.getElementById('progress-labels-fake');
+  const realLabels = document.getElementById('progress-labels-real');
+  if (fakeLabels) fakeLabels.style.display = '';
+  if (realLabels) realLabels.style.display = 'none';
 }
 
 // 点击遮罩外部时关闭输入框
